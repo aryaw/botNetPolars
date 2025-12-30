@@ -44,8 +44,6 @@ features_to_drop = [
 
 X_pl = df_filtered.drop(features_to_drop)
 y_pl = df_filtered.select(LABEL_COL)
-
-# keep numeric-only columns (critical one-line fix)
 X_pl = X_pl.select(pl.col(pl.NUMERIC_DTYPES))
 
 df_no_nan = df_filtered.drop_nulls()
