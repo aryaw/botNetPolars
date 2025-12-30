@@ -1,0 +1,10 @@
+db/
+.env
+
+assets/outputs/*.csv
+assets/*.csv
+dataset/*.csv
+
+libInternal/__pycache__/
+*.pyc
+.venv/
