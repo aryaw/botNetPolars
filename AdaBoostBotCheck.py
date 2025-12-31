@@ -9,6 +9,7 @@ from sklearn.metrics import (
     confusion_matrix
 )
 import polars as pl
+import plotly.figure_factory as ff
 
 csv_path = "dataset/NCC2AllSensors_clean_dir_encoded.csv"
 df_pl = pl.read_csv(csv_path)
@@ -19,9 +20,9 @@ con.register("flows", df_pl)
 query = """
 SELECT 
     SrcAddr, DstAddr, Proto, Dir, Dir_encode, State, Dur, TotBytes, TotPkts,
-    sTos, dTos, SrcBytes, Label, SensorId
+    sTos, dTos, SrcBytes, Label, label_as_bot, SensorId
 FROM flows
-WHERE Label IS NOT NULL
+WHERE label_as_bot IS NOT NULL
   AND REGEXP_MATCHES(SrcAddr, '^[0-9.]+$')
   AND SensorId = 3
 """
@@ -30,9 +31,10 @@ df_filtered = con.execute(query).pl()
 print("[debug --] Filtered DF shape:", df_filtered.shape)
 print(df_filtered.head())
 
-LABEL_COL = "Label"
+LABEL_COL = "label_as_bot"
 features_to_drop = [
     "Label",
+    "label_as_bot",
     "Dir",
     "SrcAddr",
     "DstAddr",
@@ -83,3 +85,23 @@ cm_pl = pl.DataFrame(
 
 print("\n confusion matrix (polars df):")
 print(cm_pl)
+
+# Plotly Confusion Matrix (HTML)
+z = cm.tolist()
+
+fig = ff.create_annotated_heatmap(
+    z,
+    x=labels,
+    y=labels,
+    colorscale='Blues',
+    showscale=True
+)
+
+fig.update_layout(
+    title="confusion matrix (AdaBoost)",
+    xaxis_title="predicted",
+    yaxis_title="actual"
+)
+
+fig.write_html("confusion_matrix_adaboost.html")
+print("\n saved: confusion_matrix_adaboost.html")
