@@ -26,3 +26,12 @@
 | **Weak -> Strong Learner** | Banyak model sederhana digabungkan menjadi satu model klasifikasi yang kuat |
 | **Fokus pada Kesalahan** | Algoritma fokus pada data yang sulit diklasifikasikan dengan menaikkan bobotnya |
 | **Model Berurutan** | Stump dilatih *secara sekuensial*, tidak paralel seperti di Random Forest |
+
+
+## Confusion Matrix (AdaBoost)
+
+### Static Image  
+![AdaBoost Result](result.png)
+
+### Interactive HTML  
+👉 [View interactive confusion matrix](confusion_matrix_adaboost.html)
