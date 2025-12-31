@@ -1,5 +1,5 @@
-import polars as pl
 import duckdb
+from polars.selectors import numeric
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import AdaBoostClassifier
 from sklearn.tree import DecisionTreeClassifier
@@ -8,15 +8,14 @@ from sklearn.metrics import (
     classification_report,
     confusion_matrix
 )
+import polars as pl
 
 csv_path = "dataset/NCC2AllSensors_clean_dir_encoded.csv"
-
 df_pl = pl.read_csv(csv_path)
 print("[debug --] Columns:", df_pl.columns)
 
 con = duckdb.connect()
 con.register("flows", df_pl)
-
 query = """
 SELECT 
     SrcAddr, DstAddr, Proto, Dir, Dir_encode, State, Dur, TotBytes, TotPkts,
@@ -42,14 +41,10 @@ features_to_drop = [
     "State"
 ]
 
-X_pl = df_filtered.drop(features_to_drop)
-y_pl = df_filtered.select(LABEL_COL)
-X_pl = X_pl.select(pl.col(pl.NUMERIC_DTYPES))
+df_filtered = df_filtered.drop_nulls()
 
-df_no_nan = df_filtered.drop_nulls()
-X_pl = df_no_nan.drop(features_to_drop)
-y_pl = df_no_nan.select(LABEL_COL)
-X_pl = X_pl.select(pl.col(pl.NUMERIC_DTYPES))
+X_pl = df_filtered.drop(features_to_drop).select(numeric())
+y_pl = df_filtered.select(LABEL_COL)
 
 X = X_pl.to_numpy()
 y = y_pl.to_numpy().ravel()
@@ -76,8 +71,8 @@ print("\n accuracy:", accuracy_score(y_test, y_pred))
 print("\n report:")
 print(classification_report(y_test, y_pred))
 
-cm = confusion_matrix(y_test, y_pred)
-labels = clf.classes_.tolist()
+labels = clf.classes_.astype(str).tolist()
+cm = confusion_matrix(y_test, y_pred, labels=clf.classes_)
 
 cm_pl = pl.DataFrame(
     cm,
