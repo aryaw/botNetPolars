@@ -4,6 +4,9 @@ db/
 assets/outputs/*.csv
 assets/*.csv
 dataset/*.csv
+dataset/src/*.csv
+dataset/src/*.binetflow
+dataset/dist/01_convertToSql/*.sql
 
 libInternal/__pycache__/
 *.pyc
