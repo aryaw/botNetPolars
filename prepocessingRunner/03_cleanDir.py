@@ -1,15 +1,18 @@
+import sys
+import os
+sys.path.append(
+    os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+)
+
 from sqlalchemy import text
 from libInternal.db import get_mysql_engine
-from sqlalchemy import text
 
 TABLES = [
-    "scenario9",
-    "scenario10",
+    # "scenario9",
+    # "scenario10",
     "scenario11",
     "scenario12",
 ]
-
-from sqlalchemy import text
 
 def ensure_dir_clean(conn, table):
     exists = conn.execute(
@@ -23,7 +26,7 @@ def ensure_dir_clean(conn, table):
         {"table": table}
     ).scalar()
 
-    if exists == 0:
+    if exists == 1:
         conn.execute(
             text(f"""
                 ALTER TABLE `{table}`

@@ -12,7 +12,6 @@ DIST_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def sql_value(val):
-    """Convert Python value to valid MySQL literal"""
     if val is None:
         return "NULL"
     if isinstance(val, float) and math.isnan(val):
@@ -61,7 +60,6 @@ CREATE TABLE `{table_name}` (
 ) ENGINE=InnoDB;
 \n""")
 
-        # INSERT ROW BY ROW
         for row in df.iter_rows(named=True):
             values = [
                 sql_value(row.get("StartTime")),
@@ -90,10 +88,8 @@ CREATE TABLE `{table_name}` (
 
     print(f"  saved  : {output_file}\n")
 
-
 def main():
     files = sorted(SRC_DIR.glob("*.binetflow"))
-
     if not files:
         print("no .binetflow files found")
         return
@@ -103,7 +99,6 @@ def main():
         convert_binetflow_to_sql(file, output_sql)
 
     print(f"converted {len(files)} files into {DIST_DIR}")
-
 
 if __name__ == "__main__":
     main()
