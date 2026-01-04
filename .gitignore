@@ -1,13 +1,22 @@
+dataset/
+dataset/**
+
 db/
 .env
 
 assets/outputs/*.csv
 assets/*.csv
-dataset/*.csv
-dataset/src/*.csv
-dataset/src/*.binetflow
-dataset/dist/01_convertToSql/*.sql
 
-libInternal/__pycache__/
+__pycache__/
 *.pyc
+*.pyo
+*.pyd
+
 .venv/
+venv/
+
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log
