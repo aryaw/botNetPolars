@@ -4,7 +4,6 @@ import psutil
 import numpy as np
 import polars as pl
 from datetime import datetime
-
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import (
@@ -21,15 +20,14 @@ from sklearn.metrics import (
     roc_auc_score,
     roc_curve
 )
-
 import networkx as nx
 import plotly.graph_objects as go
-
 from libInternal.db import get_mysql_engine
 
 RANDOM_STATE = 42
 TEST_SIZE = 0.30
 MAX_ROWS = 13_000_000
+
 
 def log_ram(tag=""):
     p = psutil.Process()
@@ -204,7 +202,7 @@ def main():
         n_jobs=1
     )
 
-    print("[Train] Training stacking model")
+    print("[Train] Training stacking model (ENGINEERING FEATURES)")
     model.fit(X_train, y_train)
     log_ram("After Train")
 
@@ -214,7 +212,7 @@ def main():
 
     y_pred = (p_test >= best_thr).astype(int)
 
-    print("\n# Evaluation")
+    print("\n# Evaluation (ENGINEERING FEATURES)")
     print("Threshold:", round(float(best_thr), 4))
     print("Precision:", precision_score(y_test, y_pred))
     print("Recall   :", recall_score(y_test, y_pred))
@@ -256,10 +254,13 @@ def main():
     edges_df = bot_df.filter(pl.col("SrcAddr").is_in(cnc_set)) \
         .select(["SrcAddr", "DstAddr", "edge_weight"])
 
-    out_html = f"Sensor3_Stacking_CNC_3D_{datetime.now().strftime('%Y%m%d_%H%M%S')}.html"
-    render_3d_graph(edges_df, cnc_set,
-                    title="3D C&C Communication Graph (Stacking ML)",
-                    out_html=out_html)
+    out_html = f"Sensor3_Stacking_Engineering_CNC_3D_{datetime.now().strftime('%Y%m%d_%H%M%S')}.html"
+    render_3d_graph(
+        edges_df,
+        cnc_set,
+        title="3D C&C Communication Graph (Stacking ML - Engineering Features)",
+        out_html=out_html
+    )
 
     gc.collect()
     log_ram("Script End")
