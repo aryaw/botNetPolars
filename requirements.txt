@@ -1,5 +1,4 @@
 polars
-pandas
 sqlalchemy
 python-dotenv
 mysql-connector-python
