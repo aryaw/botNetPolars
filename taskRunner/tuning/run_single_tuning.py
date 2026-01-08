@@ -31,25 +31,25 @@ def run_all():
     #     "BestParams": tune_logistic()
     # })
 
-    print("=== Running Random Forest ===")
-    results.append({
-        "Algorithm": "Random Forest",
-        "BestParams": tune_random_forest()
-    })
-
-    # print("=== Running SVM (RBF) ===")
+    # print("=== Running Random Forest ===")
     # results.append({
-    #     "Algorithm": "SVM (RBF)",
-    #     "BestParams": tune_svm()
+    #     "Algorithm": "Random Forest",
+    #     "BestParams": tune_random_forest()
     # })
 
-    # with open(
-    #     os.path.join(out["root"], f"best_params_{ts}.json"),
-    #     "w"
-    # ) as f:
-    #     json.dump(results, f, indent=2)
+    print("=== Running SVM (RBF) ===")
+    results.append({
+        "Algorithm": "SVM (RBF)",
+        "BestParams": tune_svm()
+    })
 
-    # export_global_comparison_table(out)
+    with open(
+        os.path.join(out["root"], f"best_params_{ts}.json"),
+        "w"
+    ) as f:
+        json.dump(results, f, indent=2)
+
+    export_global_comparison_table(out)
 
 if __name__ == "__main__":
     run_all()
