@@ -1,10 +1,10 @@
 import json
 import os
-from taskRunner.tuning.tune_adaboost import tune_adaboost
-from taskRunner.tuning.tune_decision_tree import tune_decision_tree
-from taskRunner.tuning.tune_logistic import tune_logistic
-from taskRunner.tuning.tune_random_forest import tune_random_forest
-from taskRunner.tuning.tune_svm import tune_svm
+from taskRunner.optuna.tune_adaboost import tune_adaboost
+from taskRunner.optuna.tune_decision_tree import tune_decision_tree
+from taskRunner.optuna.tune_logistic import tune_logistic
+from taskRunner.optuna.tune_random_forest import tune_random_forest
+from taskRunner.optuna.tune_svm import tune_svm
 from libInternal.dFHelper import setFileLocation
 from libInternal.globalCompare import export_global_comparison_table
 
